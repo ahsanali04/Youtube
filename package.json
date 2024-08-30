@@ -3,15 +3,22 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "android": "cp .env.dev .env && react-native run-android --mode=devdebug --appIdSuffix dev",
+    "android:stag": "cp .env.staging .env  && react-native run-android --mode=stagingdebug --appIdSuffix staging",
+    "android:prod": "cp .env.prod .env  && react-native run-android --mode=proddebug --appIdSuffix prod",
+    "ios": "amplify env checkout dev && react-native run-ios --simulator 'iPhone 15 Pro' --scheme 'BayQi-Dev'",
+    "ios:stag": "amplify env checkout stag && react-native run-ios --simulator 'iPhone 15 Pro' --scheme 'BayQi-Staging'",
+    "android:stag-release": "cp .env.staging .env  &&  cd android && gradlew assembleStagingRelease && cd ..",
+    "android:dev-release": "cp .env.dev .env &&  cd android && gradlew assembleDevRelease && cd ..",
+    "android:prod-release": "cp .env.prod .env  &&  cd android && gradlew assembleProdRelease && cd .."
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "0.73.1"
+    "react-native": "0.73.1",
+    "react-native-config": "^1.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

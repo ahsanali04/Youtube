@@ -1,4 +1,15 @@
 apply plugin: "com.android.application"
+
+project.ext.envConfigFiles = [
+   proddebug: ".env.prod",
+   prodrelease: ".env.prod",
+   devrelease: ".env.dev",
+   devdebug: ".env.dev",
+   stagingrelease: ".env.staging",
+   stagingdebug: ".env.staging"
+]
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle" // react-native-config
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
@@ -73,6 +84,28 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
+
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "com.cinema"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.cinema"
+        }
+        staging {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "com.cinema.staging"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.cinema"
+        }
+        dev {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "com.cinema.dev"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "com.cinema"
+        }
+    }
 
     namespace "com.cinema"
     defaultConfig {
