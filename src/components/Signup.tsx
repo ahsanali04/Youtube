@@ -27,6 +27,7 @@ import axios from 'axios';
 import Loader from '../common/Loader';
 import {useDispatch} from 'react-redux';
 import {logIn} from '../redux_/actions/userActions';
+import {CLOUDINARY_API_KEY, CLOUD_NAME} from '@env';
 
 const Signup: FunctionComponent = ({navigation}) => {
   const [visible, setVisible] = useState(false);
@@ -176,12 +177,12 @@ const Signup: FunctionComponent = ({navigation}) => {
       name: fileName, // image file name
     });
     data.append('upload_preset', 'new_lib'); // Cloudinary upload preset
-    data.append('cloud_name', '');
-    data.append('api_key', '');
+    data.append('cloud_name', CLOUD_NAME);
+    data.append('api_key', CLOUDINARY_API_KEY);
 
     try {
       const response = await fetch(
-        'https://api.cloudinary.com/v1_1//image/upload',
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         {
           method: 'POST',
           body: data,

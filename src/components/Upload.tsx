@@ -25,7 +25,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Loader from '../common/Loader';
 import axios from 'axios';
-
+import {CLOUDINARY_API_KEY, CLOUD_NAME} from '@env';
 
 interface asset {
   fileName: string;
@@ -44,7 +44,6 @@ const Upload: FunctionComponent = ({navigation}) => {
   const [asset, setAsset] = useState<asset | undefined>();
   const [asset1, setAsset1] = useState<asset | undefined>();
   const [loader, setLoader] = useState(false);
-
 
   const pickImage = (whichImg, setFieldValue) => {
     Alert.alert(
@@ -155,9 +154,7 @@ const Upload: FunctionComponent = ({navigation}) => {
     );
   };
 
-
   const uploadImageToCloudinary = async (imageUri, fileName) => {
-
     const data = new FormData();
     data.append('file', {
       uri: imageUri,
@@ -165,12 +162,12 @@ const Upload: FunctionComponent = ({navigation}) => {
       name: fileName, // image file name
     });
     data.append('upload_preset', 'new_lib'); // Cloudinary upload preset
-    data.append('cloud_name', '');
-    data.append('api_key', '');
+    data.append('cloud_name', CLOUD_NAME);
+    data.append('api_key', CLOUDINARY_API_KEY);
 
     try {
       const response = await fetch(
-        'https://api.cloudinary.com/v1_1//image/upload',
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
         {
           method: 'POST',
           body: data,
@@ -183,8 +180,6 @@ const Upload: FunctionComponent = ({navigation}) => {
       console.log('Error while uploading:', error);
     }
   };
-
-
 
   const uploadVide = async (values, isValid) => {
     if (validateFields(values, isValid)) {
@@ -210,19 +205,18 @@ const Upload: FunctionComponent = ({navigation}) => {
           const result = res.data;
           console.log('result', result);
           setLoader(false);
-          Alert.alert('Successfully Upload')
+          Alert.alert('Successfully Upload');
           navigation.navigate('Home');
         })
         .catch(e => {
           setLoader(false);
-          Alert.alert('something went wrong',e)
+          Alert.alert('something went wrong', e);
           console.log('e', e);
         });
     } else {
       alert('Enter data in correct formate');
     }
   };
-
 
   const uploadSchema = yup.object().shape({
     title: yup.string().required('Title is required'),
@@ -344,7 +338,9 @@ const Upload: FunctionComponent = ({navigation}) => {
                       )}
                     </View>
 
-                    <TouchableOpacity onPress={() => uploadVide(values, isValid)} style={styles.button}>
+                    <TouchableOpacity
+                      onPress={() => uploadVide(values, isValid)}
+                      style={styles.button}>
                       <Text style={styles.buttonText}>Publish</Text>
                     </TouchableOpacity>
                   </View>
