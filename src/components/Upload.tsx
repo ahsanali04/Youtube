@@ -26,6 +26,7 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Loader from '../common/Loader';
 import axios from 'axios';
 import {CLOUDINARY_API_KEY, CLOUD_NAME} from '@env';
+import {useSelector} from 'react-redux';
 
 interface asset {
   fileName: string;
@@ -40,6 +41,7 @@ const Upload: FunctionComponent = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgUrl1, setImgUrl1] = useState<string | undefined>();
+  const userData = useSelector(state => state.userReducer.userData);
 
   const [asset, setAsset] = useState<asset | undefined>();
   const [asset1, setAsset1] = useState<asset | undefined>();
@@ -136,7 +138,6 @@ const Upload: FunctionComponent = ({navigation}) => {
         setAsset(result.assets[0]);
         setFieldValue('video', result.assets[0].uri);
       } else {
-        console.log('first====', result.assets[0]);
         setImgUrl1(result.assets[0].uri);
         setAsset1(result.assets[0]);
         setFieldValue('thumbnail', result.assets[0].uri);
@@ -154,20 +155,22 @@ const Upload: FunctionComponent = ({navigation}) => {
     );
   };
 
-  const uploadImageToCloudinary = async (imageUri, fileName) => {
+  const uploadImageToCloudinary = async (whichImg, imageUri, fileName) => {
     const data = new FormData();
     data.append('file', {
       uri: imageUri,
-      type: 'image/jpeg', // or your image type
+      type: whichImg === 'video' ? 'video/mp4' : 'image/jpeg', // or your image type
       name: fileName, // image file name
     });
     data.append('upload_preset', 'new_lib'); // Cloudinary upload preset
     data.append('cloud_name', CLOUD_NAME);
     data.append('api_key', CLOUDINARY_API_KEY);
 
+    const path_name = whichImg === 'video' ? 'video' : 'image';
+
     try {
       const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${path_name}/upload`,
         {
           method: 'POST',
           body: data,
@@ -185,8 +188,13 @@ const Upload: FunctionComponent = ({navigation}) => {
     if (validateFields(values, isValid)) {
       setLoader(true);
 
-      const newAvatar = await uploadImageToCloudinary(imgUrl, asset.fileName);
+      const newAvatar = await uploadImageToCloudinary(
+        'video',
+        imgUrl,
+        asset.fileName,
+      );
       const newCoverImg = await uploadImageToCloudinary(
+        'thumbnail',
         imgUrl1,
         asset1.fileName,
       );
@@ -196,8 +204,8 @@ const Upload: FunctionComponent = ({navigation}) => {
         thumbnail: newCoverImg,
         title: values.title,
         description: values.description,
+        owner: userData?._id,
       };
-      console.log('data', data);
 
       axios
         .post('http://192.168.43.1:8000/api/v1/videos/', data)

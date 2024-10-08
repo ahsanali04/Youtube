@@ -48,7 +48,7 @@ const Profile: FunctionComponent = ({navigation}) => {
           </View>
           <View style={styles.iconMainText}>
             <Text style={styles.iconText}>{userData?.fullname}</Text>
-            <Text style={styles.channelId}>AhsanAlifsdfa-adfhaksd</Text>
+            <Text style={styles.channelId}>{userData?.username}</Text>
           </View>
         </TouchableOpacity>
         <View style={styles.infoView}>
