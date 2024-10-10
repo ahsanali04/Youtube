@@ -33,49 +33,8 @@ const Channel: FunctionComponent = ({route, navigation}) => {
     fetchUserVideos();
   }, [records?.userId]);
 
-  const videos = [
-    {
-      id: 1,
-      image: 'https://picsum.photos/200/300?random=1',
-      title: 'Exploring the Universe',
-      views: '150k',
-      uploaded: '2 hours ago',
-      duration: '10:05',
-    },
-    {
-      id: 2,
-      image: 'https://picsum.photos/200/300?random=2',
-      title: 'Top 10 Coding Tips',
-      views: '250k',
-      uploaded: '1 day ago',
-      duration: '15:30',
-    },
-    {
-      id: 3,
-      image: 'https://picsum.photos/200/300?random=3',
-      title:
-        'React Native Tutorial React Native Tutorial React Native Tutorial',
-      views: '300k',
-      uploaded: '3 days ago',
-      duration: '20:45',
-    },
-    {
-      id: 4,
-      image: 'https://picsum.photos/200/300?random=4',
-      title: 'Travel Vlog in Japan',
-      views: '180k',
-      uploaded: '5 hours ago',
-      duration: '12:20',
-    },
-    {
-      id: 5,
-      image: 'https://picsum.photos/200/300?random=5',
-      title: 'Gaming Highlights',
-      views: '500k',
-      uploaded: '2 weeks ago',
-      duration: '9:50',
-    },
-  ];
+  
+
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);
