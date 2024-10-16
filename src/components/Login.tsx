@@ -60,11 +60,11 @@ const Login: FunctionComponent = ({navigation}) => {
         })
         .catch(e => {
           setLoader(false);
-          console.log('e.message', e.response);
-          if (e.message === 'Request failed with status code 404') {
+          console.log('e.message', e.response.data.message);
+          if (e.response.data.message === 'User does not exist') {
             Alert.alert('User does not exist');
           }
-          if (e.message === 'Request failed with status code 401') {
+          if (e.response.data.message === 'Invalid user credentials') {
             Alert.alert('Invalid user credentials');
           } else {
             Alert.alert('Something went wrong contact Cinema support');
