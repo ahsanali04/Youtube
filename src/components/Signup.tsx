@@ -229,13 +229,15 @@ const Signup: FunctionComponent = ({navigation}) => {
         })
         .catch(e => {
           setLoader(false);
-          console.log('e.message', e.response);
-          if (e.message === 'Request failed with status code 409') {
+          console.log('e.message', e.response.data.message);
+          if (
+            e.response.data.message ===
+            'User with email and username already exist'
+          ) {
             Alert.alert('User with email or username already exists');
           } else {
             Alert.alert('Something went wrong contact Cinema support');
           }
-          console.log('e', e);
         });
     } else {
       alert('Enter data in correct formate');
