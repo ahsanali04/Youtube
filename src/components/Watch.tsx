@@ -4,6 +4,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React, {FunctionComponent, useState, useRef} from 'react';
 import {RootStackParam} from './navigation/AppNavigation';
@@ -195,7 +196,7 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
           </View>
         </View>
         <View style={styles.subContianer}>
-          <Text style={styles.textColor}>Keywords</Text>
+          {/* <Text style={styles.textColor}>Keywords</Text> */}
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -208,19 +209,19 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
             </View>
           ))} */}
           </ScrollView>
-        </View>
+        
 
         <TouchableOpacity
           style={{
             marginTop: responsiveHeight(1),
-            backgroundColor: 'gray',
+            backgroundColor: '#e6e6e6',
             padding: responsiveHeight(2),
             borderRadius: responsiveHeight(2),
           }}
           onPress={() => setModal(true)}>
           <Text
             style={{
-              color: '#fff',
+              color: 'gray',
               fontSize: responsiveFontSize(2),
               fontWeight: 'bold',
             }}>
@@ -239,7 +240,7 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
             <View>
               <Text
                 style={{
-                  color: '#fff',
+                  color: 'gray',
                   flexWrap: 'wrap',
                   paddingRight: responsiveHeight(6),
                 }}>
@@ -249,6 +250,7 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
             </View>
           </View>
         </TouchableOpacity>
+      </View>
       </ScrollView>
       <CommentsModal visible={modal} setModal={setModal} />
     </View>
