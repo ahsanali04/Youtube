@@ -22,6 +22,7 @@ import Video, {VideoRef} from 'react-native-video';
 import {getDate} from '../common/Date';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Slider from '@react-native-community/slider';
+import CommentsModal from '../common/CommentsModal';
 
 interface WatchScreenProp {
   navigation: StackNavigationProp<RootStackParam, 'Watch'>;
@@ -70,6 +71,7 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
   const [Data] = useState<Root>(route?.params?.item);
   const videoRef = useRef<VideoRef>(null);
 
+  const [modal, setModal] = useState(false);
   const [paused, setPaused] = useState(false);
   const [pauseButton, setPauseButton] = useState(false);
   const [currentTime, setCurrentTime] = useState(0); // Current play time
@@ -207,7 +209,48 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
           ))} */}
           </ScrollView>
         </View>
+
+        <TouchableOpacity
+          style={{
+            marginTop: responsiveHeight(1),
+            backgroundColor: 'gray',
+            padding: responsiveHeight(2),
+            borderRadius: responsiveHeight(2),
+          }}
+          onPress={() => setModal(true)}>
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: responsiveFontSize(2),
+              fontWeight: 'bold',
+            }}>
+            Comments 3
+          </Text>
+          <View style={{marginTop: responsiveHeight(2), flexDirection: 'row'}}>
+            <Image
+              source={{uri: 'https://randomuser.me/api/portraits/men/45.jpg'}}
+              style={{
+                height: responsiveHeight(5),
+                width: responsiveHeight(5),
+                borderRadius: responsiveHeight(2.5),
+                marginRight: responsiveHeight(2),
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  color: '#fff',
+                  flexWrap: 'wrap',
+                  paddingRight: responsiveHeight(6),
+                }}>
+                Hello this video is one of the great video and one of my
+                personally favourite
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
+      <CommentsModal visible={modal} setModal={setModal} />
     </View>
   );
 };
