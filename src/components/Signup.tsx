@@ -27,7 +27,7 @@ import axios from 'axios';
 import Loader from '../common/Loader';
 import {useDispatch} from 'react-redux';
 import {logIn} from '../redux_/actions/userActions';
-import {CLOUDINARY_API_KEY, CLOUD_NAME} from '@env';
+import {CLOUDINARY_API_KEY, CLOUD_NAME, BASE_URL} from '@env';
 
 const Signup: FunctionComponent = ({navigation}) => {
   const [visible, setVisible] = useState(false);
@@ -219,7 +219,7 @@ const Signup: FunctionComponent = ({navigation}) => {
       console.log('data', data);
 
       axios
-        .post('http://192.168.43.1:8000/api/v1/users/register', data)
+        .post(`${BASE_URL}/api/v1/users/register`, data)
         .then(res => {
           const result = res.data;
           console.log('result', result);

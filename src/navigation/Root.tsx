@@ -30,9 +30,9 @@ export type RootStackParam = {
   Login: undefined;
   Signup: undefined;
   Auth: undefined;
-  Watch:undefined;
-  Channel:undefined;
-  Upload:undefined;
+  Watch: undefined;
+  Channel: undefined;
+  Upload: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParam>();
@@ -41,7 +41,7 @@ const Tab = createBottomTabNavigator();
 
 const Root = () => {
   // const User = useSelector(selectUser);
-  const userData = useSelector((state)=>state.userReducer.userData)
+  const userData = useSelector(state => state.userReducer.userData);
   const AppTab = () => {
     return (
       <Tab.Navigator

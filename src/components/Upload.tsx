@@ -25,7 +25,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Loader from '../common/Loader';
 import axios from 'axios';
-import {CLOUDINARY_API_KEY, CLOUD_NAME} from '@env';
+import {CLOUDINARY_API_KEY, CLOUD_NAME, BASE_URL} from '@env';
 import {useSelector} from 'react-redux';
 
 interface asset {
@@ -208,7 +208,7 @@ const Upload: FunctionComponent = ({navigation}) => {
       };
 
       axios
-        .post('http://192.168.43.1:8000/api/v1/videos/', data)
+        .post(`${BASE_URL}/api/v1/videos/`, data)
         .then(res => {
           const result = res.data;
           console.log('result', result);
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2),
   },
   uploadContainer: {
-    height: responsiveHeight(18),
+    height: responsiveHeight(16),
     // width:responsiveWidth(8),
     backgroundColor: '#e6e6e6',
     borderRadius: responsiveWidth(2),

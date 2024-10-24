@@ -23,6 +23,7 @@ import axios from 'axios';
 import Loader from '../common/Loader';
 import {useDispatch, useSelector} from 'react-redux';
 import {logIn} from '../redux_/actions/userActions';
+import {BASE_URL} from '@env';
 
 const Login: FunctionComponent = ({navigation}) => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Login: FunctionComponent = ({navigation}) => {
       };
 
       axios
-        .post('http://192.168.43.1:8000/api/v1/users/login', data)
+        .post(`${BASE_URL}/api/v1/users/login`, data)
         .then(res => {
           const result = res.data;
           setLoader(false);
@@ -63,8 +64,7 @@ const Login: FunctionComponent = ({navigation}) => {
           console.log('e.message', e.response.data.message);
           if (e.response.data.message === 'User does not exist') {
             Alert.alert('User does not exist');
-          }
-          if (e.response.data.message === 'Invalid user credentials') {
+          } else if (e.response.data.message === 'Invalid user credentials') {
             Alert.alert('Invalid user credentials');
           } else {
             Alert.alert('Something went wrong contact Cinema support');

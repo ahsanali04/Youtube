@@ -13,6 +13,7 @@ import Loader from '../common/Loader';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {logOut} from '../redux_/actions/userActions';
+import {BASE_URL} from '@env';
 
 const Profile: FunctionComponent = ({navigation}) => {
   const [loader, setLoader] = useState(false);
@@ -22,7 +23,7 @@ const Profile: FunctionComponent = ({navigation}) => {
   const logOutUser = () => {
     setLoader(true);
     axios
-      .post('http://192.168.43.1:8000/api/v1/users/logout', {_id: userData._id})
+      .post(`${BASE_URL}/api/v1/users/logout`, {_id: userData._id})
       .then(res => {
         const result = res.data;
         setLoader(false);
@@ -40,7 +41,11 @@ const Profile: FunctionComponent = ({navigation}) => {
       <View style={styles.subContainer}>
         <Loader showModal={loader} LoaderColor={'black'} LoaderSize={'large'} />
         <TouchableOpacity
-          onPress={() => navigation.navigate('Channel',{item:{userId:userData._id}})}
+          onPress={() =>
+            navigation.navigate('Channel', {
+              item: {userId: userData._id, username: userData?.username},
+            })
+          }
           style={styles.mainOpacity}>
           <View style={styles.iconView}>
             {/* <Ionicons name="person-outline" style={styles.icon} /> */}

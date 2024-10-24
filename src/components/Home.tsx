@@ -19,10 +19,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
+import {BASE_URL} from '@env';
 
 const Home: FunctionComponent = ({navigation}) => {
   const [isLandscape, setIsLandscape] = useState(false);
   const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // Function to check the orientation and update the state
   const checkOrientation = () => {
@@ -31,13 +33,38 @@ const Home: FunctionComponent = ({navigation}) => {
   };
 
   const fetchData = async () => {
-    const result = await axios.get(
-      'http://192.168.43.1:8000/api/v1/videos/channel/detail',
-    );
-    const res = result.data;
-    setVideos(res.data);
+    try {
+      setLoading(true);
+      const result = await axios.get(
+        `${BASE_URL}/api/v1/videos/channel/detail`,
+      );
+      const res = result.data;
+      console.log('res.data', res.data)
+      setVideos(res.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
   useEffect(() => {
+    navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: [
+          {
+            position: 'absolute',
+            bottom: 4,
+            // left: 20,
+            // right: 20,
+            elevation: 0,
+            backgroundColor: '#fff',
+            height: 60,
+            borderRadius: 10,
+            ...styles.shadow,
+          },
+        ],
+      });
+    });
     fetchData();
   }, []);
 
@@ -74,7 +101,6 @@ const Home: FunctionComponent = ({navigation}) => {
       id: 6,
     },
   ];
-
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);
@@ -121,6 +147,7 @@ const Home: FunctionComponent = ({navigation}) => {
     owner,
     avatar,
     username,
+    videoId,
   }) => {
     const userData = useSelector(state => state.userReducer.userData);
 
@@ -141,11 +168,13 @@ const Home: FunctionComponent = ({navigation}) => {
                 owner,
                 avatar,
                 username,
+                videoId,
               },
             });
-            // navigation.dangerouslyGetParent().setOptions({
-            //   tabBarVisible: false
-            // });
+            // Hide the tab bar on this screen
+            navigation.getParent()?.setOptions({
+              tabBarStyle: {display: 'none'},
+            });
           }}>
           <Image
             source={{uri: imageUrl}}
@@ -164,7 +193,9 @@ const Home: FunctionComponent = ({navigation}) => {
           <View style={styles.channelIconView}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('Channel', {item: {userId: owner}})
+                navigation.navigate('Channel', {
+                  item: {userId: owner, username: username},
+                })
               }
               style={styles.channelOpacity}>
               {avatar ? (
@@ -218,30 +249,65 @@ const Home: FunctionComponent = ({navigation}) => {
         </ScrollView>
       </View>
       <View style={[isLandscape ? {flex: 1} : styles.flatlistView]}>
-        <FlatList
-          data={videos}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.flatlist}
-          contentContainerStyle={{
-            paddingBottom: responsiveHeight(10),
-          }}
-          renderItem={({item}) => (
-            <VideoItem
-              title={item?.title}
-              channelName={item?.channelName}
-              Views={item?.Views}
-              uploadedDate={item?.createdAt}
-              imageUrl={item?.thumbnail}
-              duration={item?.duration}
-              description={item?.description}
-              videoLink={item?.videoFile}
-              owner={item?.owner}
-              avatar={item?.uploader?.avatar}
-              username={item?.uploader?.username}
-            />
-          )}
-        />
+        {loading ? (
+          <FlatList
+            data={[1, 1]}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.flatlist}
+            contentContainerStyle={{
+              paddingBottom: responsiveHeight(10),
+            }}
+            renderItem={({item}) => (
+              <View style={isLandscape ? styles.videoItem1 : styles.videoItem}>
+                <View>
+                  <View
+                    style={
+                      isLandscape ? styles.loadingImage1 : styles.loadingImage
+                    }></View>
+                </View>
+                <View style={styles.videoInfo}>
+                  <View style={styles.channelIconView}>
+                    <View style={styles.channelOpacity}>
+                      <View style={styles.channelIcon}></View>
+                    </View>
+                    <View style={styles.detailView}>
+                      <View style={styles.loadingText}></View>
+
+                      <View style={styles.loadingText1}></View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            )}
+          />
+        ) : (
+          <FlatList
+            data={videos}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.flatlist}
+            contentContainerStyle={{
+              paddingBottom: responsiveHeight(10),
+            }}
+            renderItem={({item}) => (
+              <VideoItem
+                title={item?.title}
+                channelName={item?.channelName}
+                Views={item?.Views}
+                uploadedDate={item?.createdAt}
+                imageUrl={item?.thumbnail}
+                duration={item?.duration}
+                description={item?.description}
+                videoLink={item?.videoFile}
+                owner={item?.owner}
+                avatar={item?.uploader?.avatar}
+                username={item?.uploader?.username}
+                videoId={item?._id}
+              />
+            )}
+          />
+        )}
       </View>
     </View>
   );
@@ -403,5 +469,40 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     paddingBottom: 10,
     marginHorizontal: responsiveWidth(4),
+  },
+  loadingImage: {
+    width: responsiveWidth(100),
+    height: responsiveHeight(30),
+    marginRight: 10,
+    marginHorizontal: responsiveWidth(0.1),
+    backgroundColor: '#e6e6e6',
+  },
+  loadingImage1: {
+    width: responsiveWidth(45),
+    height: responsiveHeight(15),
+    marginRight: 10,
+    marginHorizontal: responsiveWidth(0.1),
+    backgroundColor: '#e6e6e6',
+  },
+  loadingText: {
+    height: responsiveHeight(2),
+    backgroundColor: '#e6e6e6',
+    width: responsiveWidth(40),
+  },
+  loadingText1: {
+    height: responsiveHeight(2),
+    backgroundColor: '#e6e6e6',
+    width: responsiveWidth(60),
+    marginTop: responsiveHeight(1),
+  },
+  shadow: {
+    shadowColor: '#FF2400',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
   },
 });
