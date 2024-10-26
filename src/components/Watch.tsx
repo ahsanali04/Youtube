@@ -2,11 +2,12 @@ import {
   StyleSheet,
   Text,
   View,
+  ActivityIndicator,
   ScrollView,
   TouchableOpacity,
   Image,
 } from 'react-native';
-import React, {FunctionComponent, useState, useRef} from 'react';
+import React, {FunctionComponent, useState, useRef, useEffect} from 'react';
 import {RootStackParam} from './navigation/AppNavigation';
 import {NavigationContainerProps, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -24,6 +25,9 @@ import {getDate} from '../common/Date';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Slider from '@react-native-community/slider';
 import CommentsModal from '../common/CommentsModal';
+import {useSelector} from 'react-redux';
+import {BASE_URL} from '@env';
+import axios from 'axios';
 
 interface WatchScreenProp {
   navigation: StackNavigationProp<RootStackParam, 'Watch'>;
@@ -68,14 +72,37 @@ function calculatePublishedDate(uploadedDate) {
 
 const Watch: FunctionComponent<WatchScreenProp> = ({
   route,
+  navigation,
 }: WatchScreenProp) => {
   const [Data] = useState<Root>(route?.params?.item);
   const videoRef = useRef<VideoRef>(null);
 
+  const userData = useSelector(state => state.userReducer.userData);
   const [modal, setModal] = useState(false);
+  const [commentLoader, setCommentLoader] = useState(false);
+  const [comments, setComments] = useState();
   const [paused, setPaused] = useState(false);
   const [pauseButton, setPauseButton] = useState(false);
   const [currentTime, setCurrentTime] = useState(0); // Current play time
+
+  useEffect(() => {
+    fetchComments();
+  }, [Data?.videoId]);
+
+  const fetchComments = async () => {
+    setCommentLoader(true);
+    try {
+      const result = await axios.get(
+        `${BASE_URL}/api/v1/comments/${Data?.videoId}`,
+      );
+      const res = result.data;
+      setCommentLoader(false);
+      setComments(res.data);
+    } catch (error) {
+      setCommentLoader(false);
+      console.log(error);
+    }
+  };
 
   const togglePause = () => {
     setPaused(!paused);
@@ -163,8 +190,57 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
 
           {/* <Image source={{uri: Data.imageUrl}} style={styles.video} /> */}
         </View>
-        <View style={styles.subContianer}>
-          <Text style={styles.textColor}>Description</Text>
+
+        <View
+          style={{
+            marginTop: responsiveHeight(2),
+            flexDirection: 'row',
+            paddingHorizontal: responsiveWidth(4),
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity
+            style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={{uri: Data?.avatar}}
+              style={{
+                height: responsiveHeight(5),
+                width: responsiveHeight(5),
+                borderRadius: responsiveHeight(2.5),
+                marginRight: responsiveHeight(2),
+              }}
+            />
+
+            <Text
+              style={{
+                color: 'black',
+                flexWrap: 'wrap',
+                paddingRight: responsiveHeight(6),
+                fontWeight: 'bold',
+                fontSize: responsiveFontSize(2.2),
+              }}>
+              {Data?.username?.length > 15
+                ? Data.username.slice(0, 15) + '...'
+                : Data?.username}
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={{color: 'gray'}}></Text>
+          <TouchableOpacity
+            disabled={Data?.owner === userData?._id}
+            style={[
+              {
+                paddingVertical: responsiveHeight(1),
+                paddingHorizontal: responsiveWidth(3),
+                borderRadius: responsiveHeight(3),
+              },
+              {
+                backgroundColor:
+                  Data?.owner === userData?._id ? 'gray' : 'black',
+              },
+            ]}>
+            <Text style={{color: 'white'}}>Subscribe</Text>
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -174,10 +250,7 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
           }}
         />
         <View style={styles.subContianer}>
-          <Text style={styles.title}>{Data.title}</Text>
-          <View style={styles.descriptionView}>
-            <Text style={styles.description}>{Data.description}</Text>
-          </View>
+          <Text style={styles.textColor}>Description</Text>
         </View>
         <View style={styles.desView}>
           <View>
@@ -196,6 +269,12 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
           </View>
         </View>
         <View style={styles.subContianer}>
+          <Text style={styles.title}>{Data.title}</Text>
+          <View style={styles.descriptionView}>
+            <Text style={styles.description}>{Data.description}</Text>
+          </View>
+        </View>
+        <View style={styles.subContianer}>
           {/* <Text style={styles.textColor}>Keywords</Text> */}
           <ScrollView
             horizontal
@@ -209,50 +288,68 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
             </View>
           ))} */}
           </ScrollView>
-        
 
-        <TouchableOpacity
-          style={{
-            marginTop: responsiveHeight(1),
-            backgroundColor: '#e6e6e6',
-            padding: responsiveHeight(2),
-            borderRadius: responsiveHeight(2),
-          }}
-          onPress={() => setModal(true)}>
-          <Text
-            style={{
-              color: 'gray',
-              fontSize: responsiveFontSize(2),
-              fontWeight: 'bold',
-            }}>
-            Comments 3
-          </Text>
-          <View style={{marginTop: responsiveHeight(2), flexDirection: 'row'}}>
-            <Image
-              source={{uri: 'https://randomuser.me/api/portraits/men/45.jpg'}}
+          {commentLoader ? (
+            <ActivityIndicator color={'black'} size={'large'} />
+          ) : (
+            <TouchableOpacity
               style={{
-                height: responsiveHeight(5),
-                width: responsiveHeight(5),
-                borderRadius: responsiveHeight(2.5),
-                marginRight: responsiveHeight(2),
+                marginTop: responsiveHeight(1),
+                backgroundColor: '#e6e6e6',
+                padding: responsiveHeight(2),
+                borderRadius: responsiveHeight(2),
               }}
-            />
-            <View>
+              onPress={() => setModal(true)}>
               <Text
                 style={{
                   color: 'gray',
-                  flexWrap: 'wrap',
-                  paddingRight: responsiveHeight(6),
+                  fontSize: responsiveFontSize(2),
+                  fontWeight: 'bold',
                 }}>
-                Hello this video is one of the great video and one of my
-                personally favourite
+                Comments {comments?.length}
               </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+              <View
+                style={{
+                  marginTop: responsiveHeight(2),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                {comments?.length > 1 ? (
+                  <Image
+                    source={{
+                      uri: comments[0]?.userDetails?.avatar,
+                    }}
+                    style={{
+                      height: responsiveHeight(5),
+                      width: responsiveHeight(5),
+                      borderRadius: responsiveHeight(2.5),
+                      marginRight: responsiveHeight(2),
+                    }}
+                  />
+                ) : (
+                  <></>
+                )}
+                <View>
+                  <Text
+                    style={{
+                      color: 'gray',
+                      flexWrap: 'wrap',
+                      paddingRight: responsiveHeight(6),
+                    }}>
+                    {comments && comments[0]?.content}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        </View>
       </ScrollView>
-      <CommentsModal visible={modal} setModal={setModal} />
+      <CommentsModal
+        visible={modal}
+        setModal={setModal}
+        comments={comments && comments}
+        videoId={Data?.videoId}
+      />
     </View>
   );
 };
