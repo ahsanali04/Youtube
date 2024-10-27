@@ -1,33 +1,111 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-  KeyboardAvoidingView,
   Modal,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Platform,
   FlatList,
   Image,
-  Keyboard,
-  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Platform,b
+  StyleSheet
 } from 'react-native';
 import {
   responsiveFontSize,
   responsiveHeight,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
-import Loader from './Loader';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
+import {BASE_URL} from '@env';
+import {useSelector} from 'react-redux';
+import Loader from './Loader';
 
-const CommentsModal = ({visible, setModal}) => {
+const CommentsModal = ({visible, setModal, comments: initialComments, videoId}) => {
   const [loader, setLoader] = useState(false);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]); // Initialize comments state
+
+  const userData = useSelector(state => state.userReducer.userData);
+
+  // Set initial comments when modal opens
+  useEffect(() => {
+    if (initialComments) {
+      setComments(initialComments);
+    }
+  }, [initialComments]);
+
+  // Function to post comment
+  const postComment = async () => {
+    setLoader(true);
+
+    const userRecord = {
+      fullname: userData?.fullname,
+      username: userData?.username,
+      avatar: userData?.avatar
+    };
+
+    const userDetails = {
+      avatar: userRecord.avatar,
+      fullname: userRecord.fullname,
+      username: userRecord.username
+    };
+
+    const data = {
+      content: comment,
+      videoId: videoId,
+      owner: userData?._id,
+    };
+
+
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/api/v1/comments/add/comment`,
+        data,
+      );
+      const newComment = res.data.data; // Assuming the new comment is in res.data.data
+      setLoader(false);
+      setComment('');
+      // const latestComment ={userDetails,...newComment}
+      // console.log('first', [userDetails,...newComment])
+      // setComments([userDetails,...newComment]);
+    } catch (error) {
+      setLoader(false);
+      console.log('Error posting comment:', error);
+    }
+  };
+
+  // Time-ago calculation (unchanged)
+  function timeAgo(date) {
+    const now = new Date();
+    const past = new Date(date);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+
+    const timeIntervals = {
+      year: 31536000,
+      month: 2592000,
+      week: 604800,
+      day: 86400,
+      hour: 3600,
+      minute: 60,
+      second: 1,
+    };
+
+    for (const [unit, secondsInUnit] of Object.entries(timeIntervals)) {
+      const elapsed = Math.floor(diffInSeconds / secondsInUnit);
+      if (elapsed >= 1) {
+        return `${elapsed} ${unit}${elapsed > 1 ? 's' : ''} ago`;
+      }
+    }
+
+    return 'just now';
+  }
 
   return (
     <Modal
-      animationType="slideInUp"
+      animationType="slide"
       transparent={true}
       visible={visible}
       swipeDirection="down">
@@ -37,7 +115,8 @@ const CommentsModal = ({visible, setModal}) => {
         style={{
           flex: 2,
           backgroundColor: '#fff',
-        //   marginTop: responsiveHeight(10),
+          marginTop: responsiveHeight(30),
+          borderRadius: responsiveHeight(2),
         }}>
         <View
           style={{
@@ -73,10 +152,12 @@ const CommentsModal = ({visible, setModal}) => {
         />
 
         <View style={{flex: 1}}>
+          {/* FlatList rendering comments */}
           <FlatList
             showsVerticalScrollIndicator={false}
             alwaysBounceVertical={false}
-            data={[1, 1]}
+            data={comments}
+            keyExtractor={item => item._id || Math.random().toString()} // Use _id or fallback to random
             contentContainerStyle={{
               paddingBottom: responsiveHeight(8),
             }}
@@ -86,19 +167,21 @@ const CommentsModal = ({visible, setModal}) => {
                   marginTop: responsiveHeight(2),
                   flexDirection: 'row',
                   marginBottom: responsiveHeight(4),
-                  paddingHorizontal: responsiveWidth(2),
+                  paddingHorizontal: responsiveWidth(4),
                 }}>
-                <Image
-                  source={{
-                    uri: 'https://randomuser.me/api/portraits/men/45.jpg',
-                  }}
-                  style={{
-                    height: responsiveHeight(5),
-                    width: responsiveHeight(5),
-                    borderRadius: responsiveHeight(2.5),
-                    marginRight: responsiveHeight(2),
-                  }}
-                />
+                {item ? (
+                  <Image
+                    source={{
+                      uri: item?.userDetails?.avatar,
+                    }}
+                    style={{
+                      height: responsiveHeight(5),
+                      width: responsiveHeight(5),
+                      borderRadius: responsiveHeight(2.5),
+                      marginRight: responsiveHeight(2),
+                    }}
+                  />
+                ) : null}
                 <View>
                   <Text
                     style={{
@@ -106,7 +189,7 @@ const CommentsModal = ({visible, setModal}) => {
                       flexWrap: 'wrap',
                       paddingRight: responsiveHeight(6),
                     }}>
-                    @ahsan • 1 week ago
+                    {item?.userDetails?.username} • {timeAgo(item?.createdAt)}
                   </Text>
                   <Text
                     style={{
@@ -114,8 +197,7 @@ const CommentsModal = ({visible, setModal}) => {
                       flexWrap: 'wrap',
                       paddingRight: responsiveHeight(6),
                     }}>
-                    Hello this video is one of the great video and one of my
-                    personally favourite
+                    {item?.content}
                   </Text>
                 </View>
               </View>
@@ -123,7 +205,6 @@ const CommentsModal = ({visible, setModal}) => {
           />
         </View>
 
-        {/* KeyboardAvoidingView only for the input field */}
         <KeyboardAvoidingView
           style={{
             flexDirection: 'row',
@@ -139,10 +220,14 @@ const CommentsModal = ({visible, setModal}) => {
             <TextInput
               placeholder="Add comments"
               placeholderTextColor={'#b3b3b3'}
+              value={comment}
+              onChangeText={e => setComment(e)}
               style={styles.input}
             />
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            disabled={comment.length < 1}
+            onPress={() => postComment()}>
             <Ionicons
               name="send"
               color="gray"
@@ -171,5 +256,6 @@ const styles = StyleSheet.create({
   input: {
     minHeight: responsiveHeight(7.5),
     marginLeft: responsiveWidth(3),
+    color: 'black',
   },
 });
