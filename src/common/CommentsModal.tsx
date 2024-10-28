@@ -8,7 +8,7 @@ import {
   FlatList,
   Image,
   KeyboardAvoidingView,
-  Platform,b
+  Platform,
   StyleSheet
 } from 'react-native';
 import {
@@ -157,7 +157,7 @@ const CommentsModal = ({visible, setModal, comments: initialComments, videoId}) 
             showsVerticalScrollIndicator={false}
             alwaysBounceVertical={false}
             data={comments}
-            keyExtractor={item => item._id || Math.random().toString()} // Use _id or fallback to random
+            keyExtractor={item => item?._id} // Use _id or fallback to random
             contentContainerStyle={{
               paddingBottom: responsiveHeight(8),
             }}
