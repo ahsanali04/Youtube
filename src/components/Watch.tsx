@@ -134,13 +134,6 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
           paddingBottom: responsiveHeight(10),
         }}>
         <View>
-          {/* <YouTube
-          videoId={Data.youtube_video_id}
-          play
-          fullscreen
-          loop
-          style={styles.video}
-          /> */}
           <TouchableOpacity onPress={() => setPauseButton(!pauseButton)}>
             <Video
               ref={videoRef}
@@ -280,13 +273,6 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.contentContainer}>
-            {/* {Data.genres.map((item, index) => (
-            <View
-              key={index}
-              style={[styles.listView]}>
-              <Text style={[styles.textClr]}>{item}</Text>
-            </View>
-          ))} */}
           </ScrollView>
 
           {commentLoader ? (
