@@ -18,6 +18,7 @@ import {selectUser} from '../redux/slices/userSlice';
 import Watch from '../components/Watch';
 import Channel from '../components/Channel';
 import Upload from '../components/Upload';
+import ChangePassword from '../components/ChangePassword';
 
 export type RootStackParam = {
   Details: undefined;
@@ -33,6 +34,7 @@ export type RootStackParam = {
   Watch: undefined;
   Channel: undefined;
   Upload: undefined;
+  ChangePassword: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParam>();
@@ -125,6 +127,7 @@ const Root = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name={'Profile'} component={Profile} />
       <Stack.Screen name={'History'} component={History} />
+      <Stack.Screen name={'ChangePassword'} component={ChangePassword} />
     </Stack.Navigator>
   );
 

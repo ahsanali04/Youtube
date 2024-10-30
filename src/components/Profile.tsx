@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
-import React, {FunctionComponent, useState} from 'react';
+import React, {FunctionComponent, useState, useEffect} from 'react';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -68,6 +68,21 @@ const Profile: FunctionComponent = ({navigation}) => {
               style={styles.infoIcon}
             />
             <Text style={styles.infoText}>Your Videos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ChangePassword'),
+                navigation.getParent()?.setOptions({
+                  tabBarStyle: {display: 'none'},
+                });
+            }}
+            style={styles.infoOpacity}>
+            <MaterialCommunityIcons
+              name="update"
+              color="#000"
+              style={styles.infoIcon}
+            />
+            <Text style={styles.infoText}>Update Password</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => logOutUser()}
