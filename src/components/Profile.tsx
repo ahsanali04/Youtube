@@ -20,6 +20,26 @@ const Profile: FunctionComponent = ({navigation}) => {
   const userData = useSelector(state => state.userReducer.userData);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: [
+          {
+            position: 'absolute',
+            bottom: 4,
+            // left: 20,
+            // right: 20,
+            elevation: 0,
+            backgroundColor: '#fff',
+            height: 60,
+            borderRadius: 10,
+            ...styles.shadow,
+          },
+        ],
+      });
+    });
+  }, []);
+
   const logOutUser = () => {
     setLoader(true);
     axios
