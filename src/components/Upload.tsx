@@ -184,7 +184,7 @@ const Upload: FunctionComponent = ({navigation}) => {
     }
   };
 
-  const uploadVide = async (values, isValid) => {
+  const uploadVideo = async (values, isValid) => {
     if (validateFields(values, isValid)) {
       setLoader(true);
 
@@ -347,7 +347,7 @@ const Upload: FunctionComponent = ({navigation}) => {
                     </View>
 
                     <TouchableOpacity
-                      onPress={() => uploadVide(values, isValid)}
+                      onPress={() => uploadVideo(values, isValid)}
                       style={styles.button}>
                       <Text style={styles.buttonText}>Publish</Text>
                     </TouchableOpacity>

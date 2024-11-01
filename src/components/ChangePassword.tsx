@@ -8,8 +8,6 @@ import {
   Platform,
   Alert,
   TextInput,
-  PermissionsAndroid,
-  Image,
   TouchableOpacity,
 } from 'react-native';
 import React, {FunctionComponent, useState} from 'react';
@@ -23,7 +21,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import Loader from '../common/Loader';
 import axios from 'axios';
-import {CLOUDINARY_API_KEY, CLOUD_NAME, BASE_URL} from '@env';
+import {BASE_URL} from '@env';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -37,7 +35,6 @@ interface asset {
 }
 
 const ChangePassword: FunctionComponent = ({navigation}) => {
-  const [visible, setVisible] = useState(false);
   const userData = useSelector(state => state.userReducer.userData);
   const [loader, setLoader] = useState(false);
 
