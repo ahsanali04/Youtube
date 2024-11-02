@@ -25,14 +25,6 @@ import {BASE_URL} from '@env';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-interface asset {
-  fileName: string;
-  fileSize: number;
-  height: number;
-  type: string;
-  uri: string;
-  width: number;
-}
 
 const ChangePassword: FunctionComponent = ({navigation}) => {
   const userData = useSelector(state => state.userReducer.userData);
@@ -145,8 +137,6 @@ const ChangePassword: FunctionComponent = ({navigation}) => {
 
             <SafeAreaView style={styles.subContainer1}>
               <KeyboardAvoidingView
-                //   style={{flex:1}}
-                //   style={{flex:1}}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 80}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
                 <ScrollView
