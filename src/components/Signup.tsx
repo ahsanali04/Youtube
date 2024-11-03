@@ -149,12 +149,12 @@ const Signup: FunctionComponent = ({navigation}) => {
     return blob;
   };
 
-  const uploadResource = async whichImg => {
-    const img = await fetchResourceFromURI(
-      whichImg === 'avatar' ? asset.uri : asset1.uri,
-    );
-    return img;
-  };
+  // const uploadResource = async whichImg => {
+  //   const img = await fetchResourceFromURI(
+  //     whichImg === 'avatar' ? asset.uri : asset1.uri,
+  //   );
+  //   return img;
+  // };
 
   const validateFields = (values, isValid) => {
     return (
