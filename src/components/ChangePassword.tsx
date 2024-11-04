@@ -25,7 +25,6 @@ import {BASE_URL} from '@env';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
 const ChangePassword: FunctionComponent = ({navigation}) => {
   const userData = useSelector(state => state.userReducer.userData);
   const [loader, setLoader] = useState(false);
