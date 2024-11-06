@@ -27,7 +27,7 @@ const History: FunctionComponent = ({route, navigation}) => {
   const [loader, setLoader] = useState(false);
   const userData = useSelector(state => state.userReducer.userData);
 
-  const fetchUserVideos = async () => {
+  const fetchUserHistory = async () => {
     setLoader(true);
     try {
       const res = await axios.get(
@@ -77,7 +77,7 @@ const History: FunctionComponent = ({route, navigation}) => {
       });
     });
 
-    fetchUserVideos();
+    fetchUserHistory();
     fetchProfile();
   }, [records?.userId]);
   console.log('records?.userId', records?.userId);
@@ -125,68 +125,9 @@ const History: FunctionComponent = ({route, navigation}) => {
           style={styles.scroll}
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}>
-          {/* {data ? (
-            <ImageBackground
-              source={{uri: data[0]?.userProfile?.coverImage}}
-              style={styles.backgroundImage}
-              resizeMode="cover"
-            />
-          ) : (
-            <ImageBackground
-              source={{
-                uri: 'https://picsum.photos/200/300?random=1',
-              }}
-              style={styles.backgroundImage}
-              resizeMode="cover"
-            />
-          )} */}
-
-          <View style={styles.title}>
-            <TouchableOpacity style={styles.iconOpacity}>
-              {data ? (
-                <Image
-                  source={{
-                    uri: data[0]?.userProfile?.avatar,
-                  }}
-                  style={styles.mainIcon}
-                />
-              ) : (
-                <Image
-                  source={{
-                    uri: 'https://picsum.photos/200/300?random=1',
-                  }}
-                  style={styles.mainIcon}
-                />
-              )}
-            </TouchableOpacity>
-            <View style={styles.titleView}>
-              <Text style={styles.titleText}>
-                {data && data[0]?.userProfile?.fullname}
-              </Text>
-              <Text style={styles.titleText1}>
-                {data && data[0]?.userProfile?.username}
-              </Text>
-              <Text
-                style={
-                  styles.subscriberText
-                }>{`${subscriber?.subscribersCount}  subscribers •  ${data?.length} videos`}</Text>
-            </View>
-          </View>
+          
 
           <View style={styles.subView}>
-            <TouchableOpacity
-              disabled={data && data[0]?.userProfile?._id === userData?._id}
-              style={[
-                styles.button,
-                {
-                  backgroundColor:
-                    data && data[0]?.userProfile?._id === userData?._id
-                      ? 'gray'
-                      : 'black',
-                },
-              ]}>
-              <Text style={styles.buttonText}>Subscribe</Text>
-            </TouchableOpacity>
             <Text style={styles.heading}>Videos</Text>
             <FlatList
               data={data}
