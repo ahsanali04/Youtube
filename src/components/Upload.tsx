@@ -72,17 +72,17 @@ const Upload: FunctionComponent = ({navigation}) => {
     if (Platform.OS === 'ios') {
       await launchCamera(options, result => {
         // if no image is captured
-        console.log('result', result);
+      
         if (!result.assets) {
           return;
         }
         if (whichImg === 'video') {
-          console.log('....=====');
+        
           setImgUrl(result.assets[0].uri);
           setAsset(result.assets[0]);
           setFieldValue('video', result.assets[0]);
         } else {
-          console.log('....');
+        
           setImgUrl1(result.assets[0].uri);
           setAsset1(result.assets[0]);
           setFieldValue('thumbnail', result.assets[0]);
@@ -211,7 +211,7 @@ const Upload: FunctionComponent = ({navigation}) => {
         .post(`${BASE_URL}/api/v1/videos/`, data)
         .then(res => {
           const result = res.data;
-          console.log('result', result);
+          
           setLoader(false);
           Alert.alert('Successfully Upload');
           navigation.navigate('Home');

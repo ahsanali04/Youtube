@@ -80,7 +80,7 @@ const History: FunctionComponent = ({route, navigation}) => {
     fetchUserHistory();
     fetchProfile();
   }, [records?.userId]);
-  console.log('records?.userId', records?.userId);
+
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);

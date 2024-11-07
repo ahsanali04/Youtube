@@ -18,7 +18,6 @@ import axios from 'axios';
 import {BASE_URL} from '@env';
 import Loader from '../common/Loader';
 import {useSelector} from 'react-redux';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Channel: FunctionComponent = ({route, navigation}) => {
   const [records, setRecords] = useState(route?.params?.item);
@@ -80,7 +79,6 @@ const Channel: FunctionComponent = ({route, navigation}) => {
     fetchUserVideos();
     fetchProfile();
   }, [records?.userId]);
-  console.log('records?.userId', records?.userId);
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);

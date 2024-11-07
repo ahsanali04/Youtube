@@ -169,7 +169,6 @@ const Signup: FunctionComponent = ({navigation}) => {
   };
 
   const uploadImageToCloudinary = async (imageUri, fileName) => {
-    console.log('imageUriimageUri', imageUri);
     const data = new FormData();
     data.append('file', {
       uri: imageUri,
@@ -216,13 +215,11 @@ const Signup: FunctionComponent = ({navigation}) => {
         password: values.password,
         username: values.username,
       };
-      console.log('data', data);
 
       axios
         .post(`${BASE_URL}/api/v1/users/register`, data)
         .then(res => {
           const result = res.data;
-          console.log('result', result);
           setLoader(false);
           dispatch(logIn(result.data));
           // navigation.navigate('Home');
