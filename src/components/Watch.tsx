@@ -87,7 +87,26 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
 
   useEffect(() => {
     fetchComments();
+    updateHistory();
   }, [Data?.videoId]);
+
+  const updateHistory = async () => {
+    setCommentLoader(true);
+    const historyData = {
+      videoId: Data?.videoId,
+      userId: userData?._id,
+    };
+    try {
+      const result = await axios.post(
+        `${BASE_URL}/api/v1/users/update/watch-history`,
+        historyData,
+      );
+      const res = result.data;
+      setCommentLoader(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchComments = async () => {
     setCommentLoader(true);
@@ -272,8 +291,7 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.contentContainer}>
-          </ScrollView>
+            contentContainerStyle={styles.contentContainer}></ScrollView>
 
           {commentLoader ? (
             <ActivityIndicator color={'black'} size={'large'} />
