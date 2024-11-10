@@ -55,13 +55,13 @@ const Profile: FunctionComponent = ({navigation}) => {
         tabBarStyle: [
           {
             position: 'absolute',
-              bottom: 4,
-              // left: 20,
-              // right: 20,
-              elevation: 0,
-              backgroundColor: '#fff',
-              height: 60,
-              borderRadius: 10,
+            bottom: 4,
+            // left: 20,
+            // right: 20,
+            elevation: 0,
+            backgroundColor: '#fff',
+            height: 60,
+            borderRadius: 10,
             ...styles.shadow,
           },
         ],
@@ -178,9 +178,11 @@ const Profile: FunctionComponent = ({navigation}) => {
               <FlatList
                 data={data}
                 horizontal
-                contentContainerStyle={{
-                  // paddingBottom: responsiveHeight(10),
-                }}
+                contentContainerStyle={
+                  {
+                    // paddingBottom: responsiveHeight(10),
+                  }
+                }
                 keyExtractor={item => item._id}
                 renderItem={({item}) => (
                   <TouchableOpacity
@@ -287,7 +289,7 @@ const styles = StyleSheet.create({
   subContainer: {
     marginTop: responsiveHeight(4),
     marginHorizontal: responsiveWidth(6),
-    marginBottom:responsiveHeight(8)
+    marginBottom: responsiveHeight(8),
   },
   icon: {
     height: responsiveHeight(10),
@@ -331,7 +333,7 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(3),
     backgroundColor: '#fff',
     elevation: 2,
-    marginBottom:responsiveHeight(1),
+    marginBottom: responsiveHeight(1),
     paddingVertical: responsiveWidth(5),
     paddingHorizontal: responsiveWidth(2),
     borderRadius: responsiveHeight(1),
