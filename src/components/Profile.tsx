@@ -50,6 +50,14 @@ const Profile: FunctionComponent = ({navigation}) => {
   };
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchUserHistory();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({
         tabBarStyle: [
@@ -67,7 +75,6 @@ const Profile: FunctionComponent = ({navigation}) => {
         ],
       });
     });
-    fetchUserHistory();
   }, []);
 
   const logOutUser = () => {
@@ -224,8 +231,8 @@ const Profile: FunctionComponent = ({navigation}) => {
                     </View>
                     <View style={styles.videoTitle}>
                       <Text style={styles.videTitleText}>
-                        {item?.title?.length > 40
-                          ? `${item.title.slice(0, 40)}....`
+                        {item?.title?.length > 18
+                          ? `${item.title.slice(0, 18)}....`
                           : item.title}
                       </Text>
                       <Text style={styles.nameText}>
