@@ -39,7 +39,6 @@ const Home: FunctionComponent = ({navigation}) => {
         `${BASE_URL}/api/v1/videos/channel/detail`,
       );
       const res = result.data;
-      console.log('res.data', res.data)
       setVideos(res.data);
       setLoading(false);
     } catch (error) {
@@ -192,11 +191,15 @@ const Home: FunctionComponent = ({navigation}) => {
         <View style={styles.videoInfo}>
           <View style={styles.channelIconView}>
             <TouchableOpacity
-              onPress={() =>
+              onPress={() => {
                 navigation.navigate('Channel', {
                   item: {userId: owner, username: username},
-                })
-              }
+                });
+                // Hide the tab bar on this screen
+                navigation.getParent()?.setOptions({
+                  tabBarStyle: {display: 'none'},
+                });
+              }}
               style={styles.channelOpacity}>
               {avatar ? (
                 <Image source={{uri: avatar}} style={styles.channelIcon} />
