@@ -47,20 +47,7 @@ const History: FunctionComponent = ({route, navigation}) => {
     }
   };
 
-  const fetchProfile = async () => {
-    setLoader(true);
-    try {
-      const res = await axios.get(
-        `${BASE_URL}/api/v1/users/channel-subscriber/${records?.username}`,
-      );
-      const result = res.data;
-      setSubscriber(result?.data);
-      setLoader(false);
-    } catch (error) {
-      setLoader(false);
-      console.log(error);
-    }
-  };
+
 
   useEffect(() => {
     navigation.addListener('focus', () => {
@@ -82,8 +69,7 @@ const History: FunctionComponent = ({route, navigation}) => {
     });
 
     fetchUserHistory();
-    fetchProfile();
-  }, [records?.userId]);
+  }, []);
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);
