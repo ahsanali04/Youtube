@@ -5,20 +5,19 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore, persistReducer} from 'redux-persist';
 
-
 const persistConfig = {
-    // Root
-    key: 'root',
-    // Storage Method (React Native)
-    storage: AsyncStorage,
-    // Whitelist (Save Specific Reducers)
-    whitelist: ['userReducer'],
-    // Blacklist (Don't Save Specific Reducers)
-    blacklist: [
-      //'orderReducer',
-      //  'authReducer'
-    ],
-  };
+  // Root
+  key: 'root',
+  // Storage Method (React Native)
+  storage: AsyncStorage,
+  // Whitelist (Save Specific Reducers)
+  whitelist: ['userReducer'],
+  // Blacklist (Don't Save Specific Reducers)
+  blacklist: [
+    //'orderReducer',
+    //  'authReducer'
+  ],
+};
 // Middleware: redux Persist Persisted Reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 // redux: Store

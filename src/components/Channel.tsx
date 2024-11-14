@@ -208,7 +208,7 @@ const Channel: FunctionComponent = ({route, navigation}) => {
                         owner: item?.owner,
                         avatar: item?.userProfile?.avatar,
                         username: item?.userProfile?.username,
-                        videoId:item?._id,
+                        videoId: item?._id,
                       },
                     });
 

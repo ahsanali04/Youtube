@@ -47,8 +47,6 @@ const History: FunctionComponent = ({route, navigation}) => {
     }
   };
 
-
-
   useEffect(() => {
     navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({
@@ -115,7 +113,7 @@ const History: FunctionComponent = ({route, navigation}) => {
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}>
           <View style={styles.subView}>
-          <View
+            <View
               style={{
                 width: responsiveWidth(100),
                 height:
@@ -201,9 +199,7 @@ const History: FunctionComponent = ({route, navigation}) => {
                         ? `${item.title.slice(0, 40)}....`
                         : item.title}
                     </Text>
-                    <Text style={styles.nameText}>
-                      {item?.owner?.username}
-                    </Text>
+                    <Text style={styles.nameText}>{item?.owner?.username}</Text>
                     <Text style={styles.videoViews}>{`${
                       item.Views
                     } views • ${timeAgo(item.createdAt)}`}</Text>
