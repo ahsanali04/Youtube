@@ -48,23 +48,23 @@ const History: FunctionComponent = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    navigation.addListener('focus', () => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: [
-          {
-            position: 'absolute',
-            bottom: 4,
-            // left: 20,
-            // right: 20,
-            elevation: 0,
-            backgroundColor: '#fff',
-            height: 60,
-            borderRadius: 10,
-            ...styles.shadow,
-          },
-        ],
-      });
-    });
+    // navigation.addListener('focus', () => {
+    //   navigation.getParent()?.setOptions({
+    //     tabBarStyle: [
+    //       {
+    //         position: 'absolute',
+    //         bottom: 4,
+    //         // left: 20,
+    //         // right: 20,
+    //         elevation: 0,
+    //         backgroundColor: '#fff',
+    //         height: 60,
+    //         borderRadius: 10,
+    //         ...styles.shadow,
+    //       },
+    //     ],
+    //   });
+    // });
 
     fetchUserHistory();
   }, []);
@@ -152,7 +152,7 @@ const History: FunctionComponent = ({route, navigation}) => {
             <FlatList
               data={data}
               contentContainerStyle={{
-                paddingBottom: responsiveHeight(10),
+                paddingBottom: responsiveHeight(2),
               }}
               keyExtractor={item => item._id}
               renderItem={({item}) => (

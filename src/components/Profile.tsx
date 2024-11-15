@@ -134,11 +134,14 @@ const Profile: FunctionComponent = ({navigation}) => {
       <ScrollView style={styles.subContainer}>
         <Loader showModal={loader} LoaderColor={'black'} LoaderSize={'large'} />
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
             navigation.navigate('Channel', {
               item: {userId: userData._id, username: userData?.username},
-            })
-          }
+            });
+            navigation.getParent()?.setOptions({
+              tabBarStyle: {display: 'none'},
+            });
+          }}
           style={styles.mainOpacity}>
           <View style={styles.iconView}>
             {/* <Ionicons name="person-outline" style={styles.icon} /> */}
@@ -162,7 +165,13 @@ const Profile: FunctionComponent = ({navigation}) => {
                 <Text style={styles.infoText}>History</Text>
               </View>
               <TouchableOpacity
-                onPress={() => navigation.navigate('History')}
+                onPress={() => {
+                  navigation.navigate('History');
+                  // Hide the tab bar on this screen
+                  navigation.getParent()?.setOptions({
+                    tabBarStyle: {display: 'none'},
+                  });
+                }}
                 style={{
                   borderColor: 'black',
                   borderWidth: 1,
@@ -258,6 +267,7 @@ const Profile: FunctionComponent = ({navigation}) => {
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('ChangePassword'),
+                // Hide the tab bar on this screen
                 navigation.getParent()?.setOptions({
                   tabBarStyle: {display: 'none'},
                 });
