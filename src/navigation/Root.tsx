@@ -128,6 +128,8 @@ const Root = () => {
       <Stack.Screen name={'Profile'} component={Profile} />
       <Stack.Screen name={'History'} component={History} />
       <Stack.Screen name={'ChangePassword'} component={ChangePassword} />
+      <Stack.Screen name={'Channel'} component={Channel} />
+      <Stack.Screen name={'Watch'} component={Watch} />
     </Stack.Navigator>
   );
 
