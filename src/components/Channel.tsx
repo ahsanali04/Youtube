@@ -58,23 +58,6 @@ const Channel: FunctionComponent = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    // navigation.addListener('focus', () => {
-    //   navigation.getParent()?.setOptions({
-    //     tabBarStyle: [
-    //       {
-    //         position: 'absolute',
-    //         bottom: 4,
-    //         // left: 20,
-    //         // right: 20,
-    //         elevation: 0,
-    //         backgroundColor: '#fff',
-    //         height: 60,
-    //         borderRadius: 10,
-    //         ...styles.shadow,
-    //       },
-    //     ],
-    //   });
-    // });
 
     fetchUserVideos();
     fetchProfile();
