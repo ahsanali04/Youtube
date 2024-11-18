@@ -256,7 +256,16 @@ const Profile: FunctionComponent = ({navigation}) => {
               />
             </View>
           </View>
-          <TouchableOpacity style={styles.infoOpacity}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Channel', {
+                item: {userId: userData._id, username: userData?.username},
+              });
+              navigation.getParent()?.setOptions({
+                tabBarStyle: {display: 'none'},
+              });
+            }}
+            style={styles.infoOpacity}>
             <MaterialIcons
               name="video-library"
               color="#000"
