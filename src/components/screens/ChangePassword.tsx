@@ -19,7 +19,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Loader from '../common/Loader';
+import Loader from '../../common/Loader';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import {useSelector} from 'react-redux';

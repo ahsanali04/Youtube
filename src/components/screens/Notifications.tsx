@@ -10,7 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import Loader from '../common/Loader';
+import Loader from '../../common/Loader';
 import {
   responsiveFontSize,
   responsiveHeight,

@@ -21,10 +21,10 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import Video, {VideoRef} from 'react-native-video';
-import {getDate} from '../common/Date';
+import {getDate} from '../../common/Date';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Slider from '@react-native-community/slider';
-import CommentsModal from '../common/CommentsModal';
+import CommentsModal from '../../common/CommentsModal';
 import {useSelector} from 'react-redux';
 import {BASE_URL} from '@env';
 import axios from 'axios';

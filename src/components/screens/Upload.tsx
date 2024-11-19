@@ -23,7 +23,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import Feather from 'react-native-vector-icons/Feather';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import Loader from '../common/Loader';
+import Loader from '../../common/Loader';
 import axios from 'axios';
 import {CLOUDINARY_API_KEY, CLOUD_NAME, BASE_URL} from '@env';
 import {useSelector} from 'react-redux';

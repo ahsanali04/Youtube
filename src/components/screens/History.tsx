@@ -16,7 +16,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import axios from 'axios';
 import {BASE_URL} from '@env';
-import Loader from '../common/Loader';
+import Loader from '../../common/Loader';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
