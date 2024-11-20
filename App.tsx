@@ -1,6 +1,6 @@
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
-import Root from './src/navigation/Root';
+import Root from './src/components/navigation/Root';
 // import {store} from './src/redux/store/store';
 import {store, persistor} from './src/redux_/store';
 import {Provider} from 'react-redux';
