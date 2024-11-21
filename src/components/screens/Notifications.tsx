@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Dimensions,
 } from 'react-native';
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import Loader from '../../common/Loader';
@@ -99,8 +98,6 @@ const Notifications: FunctionComponent = ({route, navigation}) => {
       } catch (error) {
         console.error(error);
       }
-      // const res = await fetch('https://fakestoreapi.com/products');
-      // const response: Product[] = await res.json();
     } catch (e) {
       console.log(e);
       setLoader(false);
@@ -109,7 +106,7 @@ const Notifications: FunctionComponent = ({route, navigation}) => {
 
   const filter = async item => {
     console.log('item', item);
-    setSelectedCategory(item); // Set selected category
+    setSelectedCategory(item);
     setLoader(true);
     try {
       const options = {
@@ -186,50 +183,22 @@ const Notifications: FunctionComponent = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <Loader showModal={loader} LoaderColor={'black'} LoaderSize={'large'} />
-      {/* <Header name="Shopping" /> */}
+
       {loader ? (
         <View>
-          <View
-            style={{
-              backgroundColor: '#fff',
-              height: 55,
-              borderRadius: 10,
-              marginHorizontal: 16,
-              marginTop: responsiveHeight(2),
-            }}></View>
+          <View style={styles.loadingContainer}></View>
           <FlatList
             data={[1, 1, 1, 1]}
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={item => (
-              <View
-                style={{
-                  marginVertical: responsiveHeight(2),
-                  height: responsiveHeight(6),
-                  width: responsiveWidth(20),
-                  backgroundColor: '#fff',
-                  marginHorizontal: responsiveWidth(4),
-                  borderRadius: responsiveWidth(4),
-                }}></View>
+              <View style={styles.loadingFlatListView}></View>
             )}
           />
           <FlatList
             data={[1, 1, 1, 1]}
             numColumns={2}
-            renderItem={item => (
-              <View
-                style={{
-                  marginTop: 10,
-                  justifyContent: 'center',
-                  flexDirection: 'row',
-                  height: responsiveHeight(33),
-                  borderRadius: 5,
-                  backgroundColor: '#fff',
-                  padding: 10,
-                  width: responsiveWidth(45),
-                  marginHorizontal: responsiveWidth(4),
-                }}></View>
-            )}
+            renderItem={item => <View style={styles.FlatListRenderView}></View>}
           />
         </View>
       ) : (
@@ -450,5 +419,31 @@ const styles = StyleSheet.create({
     marginTop: responsiveHeight(2),
     color: '#fff',
     fontWeight: 'bold',
+  },
+  loadingContainer: {
+    backgroundColor: '#fff',
+    height: 55,
+    borderRadius: 10,
+    marginHorizontal: 16,
+    marginTop: responsiveHeight(2),
+  },
+  loadingFlatListView: {
+    marginVertical: responsiveHeight(2),
+    height: responsiveHeight(6),
+    width: responsiveWidth(20),
+    backgroundColor: '#fff',
+    marginHorizontal: responsiveWidth(4),
+    borderRadius: responsiveWidth(4),
+  },
+  FlatListRenderView: {
+    marginTop: 10,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    height: responsiveHeight(33),
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    padding: 10,
+    width: responsiveWidth(45),
+    marginHorizontal: responsiveWidth(4),
   },
 });
