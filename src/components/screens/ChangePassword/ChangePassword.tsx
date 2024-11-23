@@ -19,13 +19,13 @@ import {
 } from 'react-native-responsive-dimensions';
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 import {useSelector} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ChangePassword: FunctionComponent = ({navigation}) => {
+export const ChangePassword: FunctionComponent = ({navigation}) => {
   const userData = useSelector(state => state.userReducer.userData);
   const [loader, setLoader] = useState(false);
 
@@ -201,7 +201,6 @@ const ChangePassword: FunctionComponent = ({navigation}) => {
   );
 };
 
-export default ChangePassword;
 
 const styles = StyleSheet.create({
   container: {

@@ -20,12 +20,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import {useDispatch, useSelector} from 'react-redux';
-import {logIn} from '../../redux_/actions/userActions';
+import {logIn} from '../../../redux_/actions/userActions';
 import {BASE_URL} from '@env';
 
-const Login: FunctionComponent = ({navigation}) => {
+export const Login: FunctionComponent = ({navigation}) => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -202,8 +202,6 @@ const Login: FunctionComponent = ({navigation}) => {
     </Formik>
   );
 };
-
-export default Login;
 
 const styles = StyleSheet.create({
   container: {

@@ -16,40 +16,30 @@ import {
 } from 'react-native-responsive-dimensions';
 import axios from 'axios';
 import {BASE_URL} from '@env';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import {useSelector} from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Channel: FunctionComponent = ({route, navigation}) => {
+export const History: FunctionComponent = ({route, navigation}) => {
   const [records, setRecords] = useState(route?.params?.item);
   const [data, setData] = useState();
   const [subscriber, setSubscriber] = useState();
   const [loader, setLoader] = useState(false);
   const userData = useSelector(state => state.userReducer.userData);
 
-  const fetchUserVideos = async () => {
+  const fetchUserHistory = async () => {
     setLoader(true);
+    const HistoryData = {
+      _id: userData._id,
+    };
     try {
-      const res = await axios.get(
-        `${BASE_URL}/api/v1/videos/user-profile/${records?.userId}`,
+      const res = await axios.post(
+        `${BASE_URL}/api/v1/users/watch-history`,
+        HistoryData,
       );
       const result = res.data;
       console.log('res.data', res.data.data[0]);
-      setData(result?.data);
-      setLoader(false);
-    } catch (error) {
-      setLoader(false);
-      console.log(error);
-    }
-  };
-
-  const fetchProfile = async () => {
-    setLoader(true);
-    try {
-      const res = await axios.get(
-        `${BASE_URL}/api/v1/users/channel-subscriber/${records?.username}`,
-      );
-      const result = res.data;
-      setSubscriber(result?.data);
+      setData(result?.data[0]?.watchHistory);
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -58,10 +48,8 @@ const Channel: FunctionComponent = ({route, navigation}) => {
   };
 
   useEffect(() => {
-
-    fetchUserVideos();
-    fetchProfile();
-  }, [records?.userId]);
+    fetchUserHistory();
+  }, []);
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);
@@ -106,73 +94,47 @@ const Channel: FunctionComponent = ({route, navigation}) => {
           style={styles.scroll}
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}>
-          {data?.length > 0 ? (
-            <ImageBackground
-              source={{uri: data[0]?.userProfile?.coverImage}}
-              style={styles.backgroundImage}
-              resizeMode="cover"
-            />
-          ) : (
-            <ImageBackground
-              source={{
-                uri: 'https://picsum.photos/200/300?random=1',
-              }}
-              style={styles.backgroundImage}
-              resizeMode="cover"
-            />
-          )}
-
-          <View style={styles.title}>
-            <TouchableOpacity style={styles.iconOpacity}>
-              {data?.length > 0 ? (
-                <Image
-                  source={{
-                    uri: data[0]?.userProfile?.avatar,
-                  }}
-                  style={styles.mainIcon}
-                />
-              ) : (
-                <Image
-                  source={{
-                    uri: 'https://picsum.photos/200/300?random=1',
-                  }}
-                  style={styles.mainIcon}
-                />
-              )}
-            </TouchableOpacity>
-            <View style={styles.titleView}>
-              <Text style={styles.titleText}>
-                {data && data[0]?.userProfile?.fullname}
-              </Text>
-              <Text style={styles.titleText1}>
-                {data && data[0]?.userProfile?.username}
-              </Text>
-              <Text
-                style={
-                  styles.subscriberText
-                }>{`${subscriber?.subscribersCount}  subscribers •  ${data?.length} videos`}</Text>
-            </View>
-          </View>
-
           <View style={styles.subView}>
-            <TouchableOpacity
-              disabled={data && data[0]?.userProfile?._id === userData?._id}
-              style={[
-                styles.button,
-                {
-                  backgroundColor:
-                    data && data[0]?.userProfile?._id === userData?._id
-                      ? 'gray'
-                      : 'black',
-                },
-              ]}>
-              <Text style={styles.buttonText}>Subscribe</Text>
-            </TouchableOpacity>
-            <Text style={styles.heading}>Videos</Text>
+            <View
+              style={{
+                width: responsiveWidth(100),
+                height:
+                  Platform.OS === 'ios'
+                    ? responsiveHeight(8)
+                    : responsiveHeight(10),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: responsiveFontSize(3.3),
+                  color: 'black',
+                  fontWeight: 'bold',
+                }}>
+                History
+              </Text>
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{
+                  width: responsiveWidth(10),
+                  height: responsiveHeight(5),
+                  position: 'absolute',
+                  left: responsiveWidth(0.5),
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Ionicons
+                  name={'arrow-back'}
+                  color={'black'}
+                  size={responsiveFontSize(3.2)}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* <Text style={styles.heading}>History</Text> */}
             <FlatList
               data={data}
               contentContainerStyle={{
-                paddingBottom: responsiveHeight(10),
+                paddingBottom: responsiveHeight(2),
               }}
               keyExtractor={item => item._id}
               renderItem={({item}) => (
@@ -189,8 +151,8 @@ const Channel: FunctionComponent = ({route, navigation}) => {
                         description: item?.description,
                         videoLink: item?.videoFile,
                         owner: item?.owner,
-                        avatar: item?.userProfile?.avatar,
-                        username: item?.userProfile?.username,
+                        avatar: item?.owner?.avatar,
+                        username: item?.owner?.username,
                         videoId: item?._id,
                       },
                     });
@@ -215,13 +177,11 @@ const Channel: FunctionComponent = ({route, navigation}) => {
                   </View>
                   <View style={styles.videoTitle}>
                     <Text style={styles.videTitleText}>
-                      {item.title.length > 40
+                      {item?.title?.length > 40
                         ? `${item.title.slice(0, 40)}....`
                         : item.title}
                     </Text>
-                    <Text style={styles.nameText}>
-                      {item?.userProfile?.username}
-                    </Text>
+                    <Text style={styles.nameText}>{item?.owner?.username}</Text>
                     <Text style={styles.videoViews}>{`${
                       item.Views
                     } views • ${timeAgo(item.createdAt)}`}</Text>
@@ -236,7 +196,6 @@ const Channel: FunctionComponent = ({route, navigation}) => {
   );
 };
 
-export default Channel;
 
 const styles = StyleSheet.create({
   container: {
@@ -306,7 +265,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   heading: {
-    fontSize: responsiveFontSize(2.5),
+    fontSize: responsiveFontSize(3.3),
     color: '#000',
     marginTop: responsiveHeight(2),
     fontWeight: 'bold',

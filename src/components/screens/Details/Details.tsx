@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {FunctionComponent} from 'react';
 
-const Details: FunctionComponent = () => {
+export const Details: FunctionComponent = () => {
   return (
     <View>
       <Text>Details</Text>
@@ -9,6 +9,5 @@ const Details: FunctionComponent = () => {
   );
 };
 
-export default Details;
 
 const styles = StyleSheet.create({});

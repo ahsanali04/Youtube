@@ -21,7 +21,7 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {BASE_URL} from '@env';
 
-const Home: FunctionComponent = ({navigation}) => {
+export const Home: FunctionComponent = ({navigation}) => {
   const [isLandscape, setIsLandscape] = useState(false);
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -316,7 +316,6 @@ const Home: FunctionComponent = ({navigation}) => {
   );
 };
 
-export default Home;
 
 const styles = StyleSheet.create({
   container: {

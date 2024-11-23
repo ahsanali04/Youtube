@@ -16,30 +16,40 @@ import {
 } from 'react-native-responsive-dimensions';
 import axios from 'axios';
 import {BASE_URL} from '@env';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import {useSelector} from 'react-redux';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const History: FunctionComponent = ({route, navigation}) => {
+export const Channel: FunctionComponent = ({route, navigation}) => {
   const [records, setRecords] = useState(route?.params?.item);
   const [data, setData] = useState();
   const [subscriber, setSubscriber] = useState();
   const [loader, setLoader] = useState(false);
   const userData = useSelector(state => state.userReducer.userData);
 
-  const fetchUserHistory = async () => {
+  const fetchUserVideos = async () => {
     setLoader(true);
-    const HistoryData = {
-      _id: userData._id,
-    };
     try {
-      const res = await axios.post(
-        `${BASE_URL}/api/v1/users/watch-history`,
-        HistoryData,
+      const res = await axios.get(
+        `${BASE_URL}/api/v1/videos/user-profile/${records?.userId}`,
       );
       const result = res.data;
       console.log('res.data', res.data.data[0]);
-      setData(result?.data[0]?.watchHistory);
+      setData(result?.data);
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      console.log(error);
+    }
+  };
+
+  const fetchProfile = async () => {
+    setLoader(true);
+    try {
+      const res = await axios.get(
+        `${BASE_URL}/api/v1/users/channel-subscriber/${records?.username}`,
+      );
+      const result = res.data;
+      setSubscriber(result?.data);
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -48,8 +58,10 @@ const History: FunctionComponent = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    fetchUserHistory();
-  }, []);
+
+    fetchUserVideos();
+    fetchProfile();
+  }, [records?.userId]);
 
   const convertVideoTime = time => {
     const durationInSeconds = Math.floor(time);
@@ -94,47 +106,73 @@ const History: FunctionComponent = ({route, navigation}) => {
           style={styles.scroll}
           alwaysBounceVertical={false}
           showsVerticalScrollIndicator={false}>
-          <View style={styles.subView}>
-            <View
-              style={{
-                width: responsiveWidth(100),
-                height:
-                  Platform.OS === 'ios'
-                    ? responsiveHeight(8)
-                    : responsiveHeight(10),
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: responsiveFontSize(3.3),
-                  color: 'black',
-                  fontWeight: 'bold',
-                }}>
-                History
-              </Text>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{
-                  width: responsiveWidth(10),
-                  height: responsiveHeight(5),
-                  position: 'absolute',
-                  left: responsiveWidth(0.5),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Ionicons
-                  name={'arrow-back'}
-                  color={'black'}
-                  size={responsiveFontSize(3.2)}
+          {data?.length > 0 ? (
+            <ImageBackground
+              source={{uri: data[0]?.userProfile?.coverImage}}
+              style={styles.backgroundImage}
+              resizeMode="cover"
+            />
+          ) : (
+            <ImageBackground
+              source={{
+                uri: 'https://picsum.photos/200/300?random=1',
+              }}
+              style={styles.backgroundImage}
+              resizeMode="cover"
+            />
+          )}
+
+          <View style={styles.title}>
+            <TouchableOpacity style={styles.iconOpacity}>
+              {data?.length > 0 ? (
+                <Image
+                  source={{
+                    uri: data[0]?.userProfile?.avatar,
+                  }}
+                  style={styles.mainIcon}
                 />
-              </TouchableOpacity>
+              ) : (
+                <Image
+                  source={{
+                    uri: 'https://picsum.photos/200/300?random=1',
+                  }}
+                  style={styles.mainIcon}
+                />
+              )}
+            </TouchableOpacity>
+            <View style={styles.titleView}>
+              <Text style={styles.titleText}>
+                {data && data[0]?.userProfile?.fullname}
+              </Text>
+              <Text style={styles.titleText1}>
+                {data && data[0]?.userProfile?.username}
+              </Text>
+              <Text
+                style={
+                  styles.subscriberText
+                }>{`${subscriber?.subscribersCount}  subscribers •  ${data?.length} videos`}</Text>
             </View>
-            {/* <Text style={styles.heading}>History</Text> */}
+          </View>
+
+          <View style={styles.subView}>
+            <TouchableOpacity
+              disabled={data && data[0]?.userProfile?._id === userData?._id}
+              style={[
+                styles.button,
+                {
+                  backgroundColor:
+                    data && data[0]?.userProfile?._id === userData?._id
+                      ? 'gray'
+                      : 'black',
+                },
+              ]}>
+              <Text style={styles.buttonText}>Subscribe</Text>
+            </TouchableOpacity>
+            <Text style={styles.heading}>Videos</Text>
             <FlatList
               data={data}
               contentContainerStyle={{
-                paddingBottom: responsiveHeight(2),
+                paddingBottom: responsiveHeight(10),
               }}
               keyExtractor={item => item._id}
               renderItem={({item}) => (
@@ -151,8 +189,8 @@ const History: FunctionComponent = ({route, navigation}) => {
                         description: item?.description,
                         videoLink: item?.videoFile,
                         owner: item?.owner,
-                        avatar: item?.owner?.avatar,
-                        username: item?.owner?.username,
+                        avatar: item?.userProfile?.avatar,
+                        username: item?.userProfile?.username,
                         videoId: item?._id,
                       },
                     });
@@ -177,11 +215,13 @@ const History: FunctionComponent = ({route, navigation}) => {
                   </View>
                   <View style={styles.videoTitle}>
                     <Text style={styles.videTitleText}>
-                      {item?.title?.length > 40
+                      {item.title.length > 40
                         ? `${item.title.slice(0, 40)}....`
                         : item.title}
                     </Text>
-                    <Text style={styles.nameText}>{item?.owner?.username}</Text>
+                    <Text style={styles.nameText}>
+                      {item?.userProfile?.username}
+                    </Text>
                     <Text style={styles.videoViews}>{`${
                       item.Views
                     } views • ${timeAgo(item.createdAt)}`}</Text>
@@ -196,7 +236,6 @@ const History: FunctionComponent = ({route, navigation}) => {
   );
 };
 
-export default History;
 
 const styles = StyleSheet.create({
   container: {
@@ -266,7 +305,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   heading: {
-    fontSize: responsiveFontSize(3.3),
+    fontSize: responsiveFontSize(2.5),
     color: '#000',
     marginTop: responsiveHeight(2),
     fontWeight: 'bold',
