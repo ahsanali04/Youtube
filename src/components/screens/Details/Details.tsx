@@ -9,5 +9,4 @@ export const Details: FunctionComponent = () => {
   );
 };
 
-
 const styles = StyleSheet.create({});
