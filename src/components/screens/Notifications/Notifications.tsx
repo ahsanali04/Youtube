@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import {
   responsiveFontSize,
   responsiveHeight,
@@ -17,7 +17,7 @@ import {
 } from 'react-native-responsive-dimensions';
 import axios from 'axios';
 
-const Notifications: FunctionComponent = ({route, navigation}) => {
+export const Notifications: FunctionComponent = ({route, navigation}) => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -277,7 +277,6 @@ const Notifications: FunctionComponent = ({route, navigation}) => {
   );
 };
 
-export default Notifications;
 
 const styles = StyleSheet.create({
   container: {

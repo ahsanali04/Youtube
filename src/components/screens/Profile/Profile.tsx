@@ -17,13 +17,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {logOut} from '../../redux_/actions/userActions';
+import {logOut} from '../../../redux_/actions/userActions';
 import {BASE_URL} from '@env';
 
-const Profile: FunctionComponent = ({navigation}) => {
+export const Profile: FunctionComponent = ({navigation}) => {
   const [loader, setLoader] = useState(false);
   const userData = useSelector(state => state.userReducer.userData);
   const dispatch = useDispatch();
@@ -305,7 +305,6 @@ const Profile: FunctionComponent = ({navigation}) => {
   );
 };
 
-export default Profile;
 
 const styles = StyleSheet.create({
   container: {
