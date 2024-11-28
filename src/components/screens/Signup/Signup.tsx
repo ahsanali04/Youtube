@@ -24,12 +24,12 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import axios from 'axios';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import {useDispatch} from 'react-redux';
-import {logIn} from '../../redux_/actions/userActions';
+import {logIn} from '../../../redux_/actions/userActions';
 import {CLOUDINARY_API_KEY, CLOUD_NAME, BASE_URL} from '@env';
 
-const Signup: FunctionComponent = ({navigation}) => {
+export const Signup: FunctionComponent = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [imgUrl, setImgUrl] = useState(null);
   const [imgUrl1, setImgUrl1] = useState(null);
@@ -424,8 +424,6 @@ const Signup: FunctionComponent = ({navigation}) => {
     </Formik>
   );
 };
-
-export default Signup;
 
 const styles = StyleSheet.create({
   container: {

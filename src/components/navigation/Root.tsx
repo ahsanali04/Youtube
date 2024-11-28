@@ -12,7 +12,7 @@ import {Details} from '../screens/Details/Details';
 import {History} from '../screens/History/History';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 import {Login} from '../screens/Login/Login';
-import Signup from '../screens/Signup';
+import {Signup} from '../screens/Signup/Signup';
 import {useSelector} from 'react-redux';
 import {selectUser} from '../../redux/slices/userSlice';
 import Watch from '../screens/Watch';
