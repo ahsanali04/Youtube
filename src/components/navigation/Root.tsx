@@ -17,7 +17,7 @@ import {useSelector} from 'react-redux';
 import {selectUser} from '../../redux/slices/userSlice';
 import Watch from '../screens/Watch';
 import {Channel} from '../screens/Channel/Channel';
-import Upload from '../screens/Upload';
+import {Upload} from '../screens/Upload/Upload';
 import {ChangePassword} from '../screens/ChangePassword/ChangePassword';
 
 export type RootStackParam = {

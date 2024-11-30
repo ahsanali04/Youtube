@@ -23,7 +23,7 @@ import {Formik} from 'formik';
 import * as yup from 'yup';
 import Feather from 'react-native-vector-icons/Feather';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import Loader from '../../common/Loader';
+import Loader from '../../../common/Loader';
 import axios from 'axios';
 import {CLOUDINARY_API_KEY, CLOUD_NAME, BASE_URL} from '@env';
 import {useSelector} from 'react-redux';
@@ -37,7 +37,7 @@ interface asset {
   width: number;
 }
 
-const Upload: FunctionComponent = ({navigation}) => {
+export const Upload: FunctionComponent = ({navigation}) => {
   const [visible, setVisible] = useState(false);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgUrl1, setImgUrl1] = useState<string | undefined>();
@@ -359,8 +359,6 @@ const Upload: FunctionComponent = ({navigation}) => {
     </Formik>
   );
 };
-
-export default Upload;
 
 const styles = StyleSheet.create({
   container: {
