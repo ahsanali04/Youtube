@@ -21,10 +21,10 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import Video, {VideoRef} from 'react-native-video';
-import {getDate} from '../../common/Date';
+import {getDate} from '../../../common/Date';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Slider from '@react-native-community/slider';
-import CommentsModal from '../../common/CommentsModal';
+import CommentsModal from '../../../common/CommentsModal';
 import {useSelector} from 'react-redux';
 import {BASE_URL} from '@env';
 import axios from 'axios';
@@ -70,7 +70,7 @@ function calculatePublishedDate(uploadedDate) {
   return now.toISOString(); // Returns the ISO 8601 date format
 }
 
-const Watch: FunctionComponent<WatchScreenProp> = ({
+export const Watch: FunctionComponent<WatchScreenProp> = ({
   route,
   navigation,
 }: WatchScreenProp) => {
@@ -357,8 +357,6 @@ const Watch: FunctionComponent<WatchScreenProp> = ({
     </View>
   );
 };
-
-export default Watch;
 
 const styles = StyleSheet.create({
   container: {

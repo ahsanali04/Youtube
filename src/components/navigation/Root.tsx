@@ -15,7 +15,7 @@ import {Login} from '../screens/Login/Login';
 import {Signup} from '../screens/Signup/Signup';
 import {useSelector} from 'react-redux';
 import {selectUser} from '../../redux/slices/userSlice';
-import Watch from '../screens/Watch';
+import Watch from '../screens/Watch/Watch';
 import {Channel} from '../screens/Channel/Channel';
 import {Upload} from '../screens/Upload/Upload';
 import {ChangePassword} from '../screens/ChangePassword/ChangePassword';
